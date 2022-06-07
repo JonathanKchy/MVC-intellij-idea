@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Practice {
-    static String mail_id, mail_date,fecha_andre, mail_type, file_doc_model, file_uid, unidades_certificadas="1.00", mail_from, mail_to,direccion_CC="correo@certificado.lleida.net", gstatus, gstatus_aux, mail_subj, add_id, add_displaydate, add_uid;
+    static String mail_id, mail_date,fecha_andre, mail_type, file_doc_model, file_uid, unidades_certificadas, mail_from, mail_to,direccion_CC="correo@certificado.lleida.net", gstatus, gstatus_aux, mail_subj, add_id, add_displaydate, add_uid;
     public static void main(String[] args) throws MalformedURLException, IOException {
         System.out.println("Espere");
         int contador = 0, numeroCelda = 0;
@@ -44,7 +44,7 @@ public class Practice {
 
         try {
 
-            URL url= new URL("https://tsa.lleida.net/cgi-bin/mailcertapi.cgi?action=list_pdf&user=sodigsa@ec&password=TIiANcmymJ&mail_id=97277518");
+           URL url= new URL("https://tsa.lleida.net/cgi-bin/mailcertapi.cgi?action=list_pdf&user=sodigsa@ec&password=TIiANcmymJ&mail_id=97277942");
             //URL url= new URL("https://tsa.lleida.net/cgi-bin/mailcertapi.cgi?action=list_pdf&user=sodigsa@ec&password=TIiANcmymJ&mail_date_min=20220501070000&mail_date_max=20220601070000");
             HttpsURLConnection conn=(HttpsURLConnection)url.openConnection();
             conn.setRequestMethod("GET");
@@ -197,6 +197,22 @@ public class Practice {
                         //System.out.println(linea);
                         //System.out.println("mail_id: "+linea.substring(9, fin));
                         informationString.append("mail_date: "+mail_type);
+                        informationString.append("\n");
+                    } else if(linea.contains("<credits>")) {
+                        int tamano=linea.length();
+                        int fin=tamano-10;
+                        unidades_certificadas=linea.substring(9, fin);
+                        System.out.println(unidades_certificadas);
+                        if (Integer.parseInt(unidades_certificadas)==14){
+                            unidades_certificadas="2.00";
+                        }else {
+                            unidades_certificadas="1.00";
+                        }
+                        //System.out.println(linea.length());
+                        //System.out.println(linea);
+                        //System.out.println("mail_id: "+linea.substring(9, fin));
+                        informationString.append("unidades_certificadas: "+unidades_certificadas);
+                        System.out.println(unidades_certificadas);
                         informationString.append("\n");
                     }
                     //+++++++++++++++++++++++++++++
@@ -378,7 +394,7 @@ public class Practice {
                         numeroCelda++;
 
                         //seteo de variables
-                        mail_date=mail_date=mail_type=fecha_andre=file_doc_model=file_uid=mail_from=mail_to=gstatus=gstatus_aux=mail_subj=add_id=add_uid=add_displaydate="";
+                        mail_date=mail_date=unidades_certificadas=mail_type=fecha_andre=file_doc_model=file_uid=mail_from=mail_to=gstatus=gstatus_aux=mail_subj=add_id=add_uid=add_displaydate="";
                         //nueva fila
                         numeroCelda=0;
                     }
